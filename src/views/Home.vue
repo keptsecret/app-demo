@@ -1,5 +1,8 @@
 <template>
   <div class="home">
+     <div align="left">
+      <button @click="resetup()">Set up app again</button>
+     </div>
     <main>
       <Panel
         class="demo-panel"
@@ -132,6 +135,12 @@ export default {
         score = 0;
       }
       this.playerScore += score;
+    },
+
+    resetup: function() {
+      localStorage.clear();
+      window.clearInterval(this.time); // stops the timer
+      this.$router.push('/?redirect=' + this.$route.path);
     }
 
   },
@@ -149,7 +158,7 @@ export default {
 <style lang="scss">
 body {
   margin: 0;
-  background: #0F7358;
+  background: #d3e4ed;
 
   display: flex;
   flex-direction: column;

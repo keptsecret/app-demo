@@ -7,10 +7,12 @@
             <input type="file" multiple name="upload" id="file">
             <button type="button" @click="sendImage()">Upload Images</button>
         </div>
-        <div style="margin: 10px">
-            <h3 id="message"></h3>
-            <button type="button" @click="upSuccess()" v-if="checkUpload">Go to App Page</button>
-        </div>
+        <transition name="access-app">
+            <div v-if="checkUpload" style="margin: 10px">
+                <h3 id="message">Now you can use the app</h3>
+                <button type="button" @click="upSuccess()">Go to App Page</button>
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -45,16 +47,15 @@ export default {
             }
 
             this.checkUpload = true;
-            localStorage.setItem("upload", this.checkUpload);
-            document.getElementById('message').innerHTML = "Now you can use the app";
         },
 
         upSuccess: function() {
             console.log(localStorage.length);
-            if (document.getElementById('file').files.length !== (localStorage.length - 2) || document.getElementById('file').files.length == 0) {
+            if (document.getElementById('file').files.length !== (localStorage.length - 1) || document.getElementById('file').files.length == 0) {
                 this.upFail();
                 return;
             }
+            localStorage.setItem("upload", this.checkUpload);
             this.$router.replace(this.$route.query.redirect || '/app');
         },
 
@@ -68,13 +69,13 @@ export default {
     },
 
     created() {
-        if (localStorage.getItem("upload")) {
+        if (JSON.parse(localStorage.getItem("upload"))) {
             this.$router.replace(this.$route.query.redirect || '/app');
         }
     },
 
     updated() {
-        if (localStorage.getItem("upload")) {
+        if (JSON.parse(localStorage.getItem("upload"))) {
             this.$router.replace(this.$route.query.redirect || '/app');
         }
     }
@@ -83,6 +84,12 @@ export default {
 </script>
 
 <style lang="scss">
+    .access-app-enter, .access-app-leave-to {
+        opacity: 0;
+    }
 
+    .access-app-enter-active, .access-app-leave-active {
+        transition: opacity 3s;
+    }
 </style>
 

@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="reset" @click="resetPage()">RESET</button>
+    <button type="button" class="reset" @click="resetPage()">NEXT</button>
 </template>
 
 
