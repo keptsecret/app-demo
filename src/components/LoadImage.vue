@@ -24,7 +24,8 @@ export default {
 			imgData: null,
 			confirm: true,
 			showButton: true,
-			seconds: 0
+			seconds: 0,
+			file: null
 		};
 	},
 
@@ -40,10 +41,10 @@ export default {
 			var img = new Image();
 
 			var choice = "image" + randIndex;
-			var file = localStorage.getItem(choice);
-			console.log(file);
+			this.file = localStorage.getItem(choice);
+			console.log(this.file);
             
-			img.src = file;
+			img.src = this.file;
 			console.log(img.src);
 			
 			img.onload = function() {
@@ -81,6 +82,29 @@ export default {
 			document.getElementById('image_container').style.width = 0;
 			this.showButton = true;
 		},
+
+		showFullImage: function() {
+			//document.getElementById('image_container').style.height = 0;
+
+			var ctx = canvas.getContext('2d');
+			var img = new Image();
+			img.src = this.file;
+
+			img.onload = function() {
+				var scaleRatio = 1;
+				if (img.width > 800) scaleRatio = 800 / img.width;
+				if (img.height > 1000) scaleRatio = 1000 / img.height;
+				
+				canvas.width = img.width * scaleRatio;
+				canvas.height = img.height * scaleRatio;
+
+				ctx.clearRect(0, 0, img.width, img.height);
+				ctx.drawImage(img, 0, 0, img.width * scaleRatio, img.height * scaleRatio);
+			}
+
+			//document.getElementById('image_container').style.height = 'auto';
+			
+		}
 
 	},
 

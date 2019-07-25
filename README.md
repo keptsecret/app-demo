@@ -32,7 +32,8 @@ This means if the guess takes 30 seconds or longer, the score received is 0
 - ~~*work on transitions*~~
 - *improve design (color scheme?)*
 - *scoring mechanic, maybe text file to array for answers?*
-- *show full image after submitting answer*
+- ~~*show full image after submitting answer*~~
+- *user settings menu (maybe) e.g. % of image displayed/refresh user*
 
 Additional packages added include:
 - ~~Slim Dialog for VueJS~~

@@ -42,7 +42,7 @@
               <h1>Results</h1>
               <p>You answered <span style="color: red">{{answer}}</span></p>
               <p>Computer answered <span style="color: blue">{{AIanswer}}</span></p>
-              <button @click="closeResults()">Show full picture</button>
+              <button ref="close" @click="closeResults()">Show full picture</button>
             </div>
           </div>
         </transition>
@@ -157,6 +157,7 @@ export default {
 
     closeResults: function() {
       this.showResults = false;
+      this.$refs.img_canvas.showFullImage();
     }
 
   },
