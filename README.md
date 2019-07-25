@@ -28,13 +28,14 @@ This means if the guess takes 30 seconds or longer, the score received is 0
 - *will have to match this to answer from text file somehow*
   
 *TODO:* 
-- *could use custom dialog boxes*
-- *work on transitions*
+- ~~*could use custom dialog boxes*~~
+- ~~*work on transitions*~~
 - *improve design (color scheme?)*
 - *scoring mechanic, maybe text file to array for answers?*
+- *show full image after submitting answer*
 
 Additional packages added include:
-- Slim Dialog for VueJS
+- ~~Slim Dialog for VueJS~~
 - VeeValidate
 
 ## Project setup
