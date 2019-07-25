@@ -1,7 +1,7 @@
 <template>
   <div class="home">
      <div align="left">
-      <button @click="resetup()">Set up app again</button>
+      <button class="reload" style="" @click="resetup()">&#8635;</button>
      </div>
     <main>
       <Panel
@@ -18,7 +18,8 @@
           <p ref="timer" v-if="enableSubmit()"><time>Timer: 0s</time></p>
         </div>
 
-          <div style="display: flex; margin-top: 20px">
+        <transition name="slide">
+          <div style="display: flex; margin-top: 20px" v-if="enableSubmit()">
             <div style="flex: 1; margin-right: 20px; margin-left: 10px">
               <template>
                 <Form
@@ -33,6 +34,18 @@
               <label>{{AIanswer}}</label>
             </div>
           </div>
+        </transition>
+
+        <transition name="results-popup">
+          <div class="modal" v-if="showResults">
+            <div class="modal-content">
+              <h1>Results</h1>
+              <p>You answered <span style="color: red">{{answer}}</span></p>
+              <p>Computer answered <span style="color: blue">{{AIanswer}}</span></p>
+              <button @click="closeResults()">Show full picture</button>
+            </div>
+          </div>
+        </transition>
 
         <div>
           <div>
@@ -65,7 +78,8 @@ function initialState() {
     playerName: "",
     playerScore: 0,
     seconds: 0,
-    time: null
+    time: null,
+    showResults: false
   }
 }
 
@@ -87,11 +101,9 @@ export default {
     submit: function (answer) {
       document.getElementById("output").innerHTML = "Your answer: " + answer;
       this.answer = answer;
-      this.message = "You answered: \"" + this.answer + "\" - and the AI answered: \"" + this.AIanswer + "\"";
-      const options = {title: 'Result', size: 'sm'};
-      this.$dialogs.alert(this.message, options)
-      .then(res => {
-      console.log(res)});
+      
+      // code for modal !!!!!
+      this.showResults = true;
       console.log(this.answer.length);
       window.clearInterval(this.time); // stops the timer
       this.calculateScore(); // calculate the score
@@ -141,6 +153,10 @@ export default {
       localStorage.clear();
       window.clearInterval(this.time); // stops the timer
       this.$router.push('/?redirect=' + this.$route.path);
+    },
+
+    closeResults: function() {
+      this.showResults = false;
     }
 
   },
@@ -178,25 +194,85 @@ h2 {
   font-size: 2rem;
 }
 
-.submit-btn {
-  display: inline-block;
-  font-weight: bold;
-  height: 48px;
-  padding: 5px 10px;
-  color: #fff;
-  font-size: 20px;
+.slide-enter, .slide-leave-to {
+  opacity: 0;
+  transform: translateY(-50px)
+}
+
+.slide-enter-active, .slide-leave-active {
+  transition: all .5s ease;
+}
+
+.results-popup-enter, .results-popup-leave-to {
+  opacity: 0;
+  transform: scale(0.5)
+}
+
+.results-popup-enter-active, .results-popup-leave-active {
+  transition: all .1s;
+}
+
+.reload {
+  color: #aaaaaa; 
+  background-color: transparent; 
+  border: none; 
+  font-size: 30px; 
+  font-weight: bolder;
+  margin: auto;
+
+  &:focus, &:hover {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+}
+
+.modal {
+    display: block; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 10px solid #15a57f;
+  border-radius: 5px;
+  width: 60%;
+
+  p {
+    color: black;
+  }
+  
+  h1 {
+    color: #128C6C;
+  }
+
+  h3 {
+    color: red;
+  }
+}
+
+/* The Close Button */
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
   font-weight: bold;
 
-  background-color: #4EB599;
-  text-align: center;
-  vertical-align: middle;
-  user-select: none;
-  border-radius: 3px;
-  border: 1px solid transparent;
-
-  &:disabled {
-    background: #37333c;
-    opacity: 0.65;
+  &:hover, &:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
   }
 }
 </style>

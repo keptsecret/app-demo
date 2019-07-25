@@ -4,6 +4,7 @@
   max-width: 1024px;
   min-height: 700px;
   width: 100%;
+  margin-top: 10px;
 
   display: flex;
   flex-direction: column;
@@ -50,9 +51,16 @@
     user-select: none;
     border-radius: 50%;
     border: 5px solid white;
+    cursor:pointer;
+    
+    &:hover {
+      background: #149976;
+    }
 
     &:active {
       background: #A63716;
+      box-shadow: inset 0 2px 5px #A63716;
+
     }
   }
 
@@ -66,56 +74,6 @@
       height: 100px;
       padding: 20px;
     }
-  }
-
-  .modal {
-    display: block; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: auto; /* Enable scroll if needed */
-    background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
-  }
-
-  .modal-content {
-    background-color: #fefefe;
-    margin: auto;
-    padding: 20px;
-    border: 10px solid #15a57f;
-    border-radius: 5px;
-    width: 60%;
-
-    p {
-      color: black;
-    }
-    
-    h1 {
-      color: #128C6C;
-    }
-
-    h3 {
-      color: red;
-    }
-  }
-  
-  /* The Close Button */
-  .close {
-    color: #aaaaaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-  }
-  
-  .close:hover,
-  .close:focus {
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
   }
 
   .info-popup-enter, .info-popup-leave-to{

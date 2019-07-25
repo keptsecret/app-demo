@@ -12,7 +12,7 @@
       type="button"
       @click="handleClick(answer)"
       >
-      Submit
+      SUBMIT
     </button>
   </form>
 </template>

@@ -1,10 +1,10 @@
 <template>
 	<div>
-		<div class="load_image">
+		<div id="image_container" class="load_image">
 			<canvas id="canvas" ref="canvas" class="canvas"></canvas>
 		</div>
 		<div style="margin-right: 10px">
-			<button v-if="showButton" id="input" @click="buttonClicked(confirm)">Reveal</button>
+			<button class="reveal" v-if="showButton" id="input" @click="buttonClicked(confirm)">Reveal</button>
 		</div>
 		
 	</div>
@@ -12,6 +12,7 @@
 
 <script>
 import image from "@/assets/1.jpg"
+import { setTimeout } from 'timers';
 
 export default {
 	name: "LoadImage",	
@@ -30,6 +31,9 @@ export default {
 	methods: {
 
 		buttonClicked: function(confirm) {
+
+			document.getElementById('image_container').style.width = '100%';
+
 			var ctx = canvas.getContext('2d');
 			var length = localStorage.getItem("length");
 			var randIndex = Math.floor(Math.random() * length);
@@ -64,6 +68,7 @@ export default {
 				ctx.drawImage(img, imgClipStartX, imgClipStartY, drawWidth, drawHeight, imgPositionX, imgPositionY, drawWidth*scaleRatio, drawHeight*scaleRatio);
 			}
 			//var confirm = true;
+
 			this.$emit("img-revealed", confirm);
 			this.showButton = false;
 		},
@@ -73,6 +78,7 @@ export default {
 			ctx.clearRect(0, 0, 3000, 3000);
 			canvas.width = 3000;
 			canvas.height = 500;
+			document.getElementById('image_container').style.width = 0;
 			this.showButton = true;
 		},
 
