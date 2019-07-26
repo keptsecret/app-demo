@@ -12,6 +12,8 @@
             <p>2. Make a guess of what the image shows</p>
             <p>You are playing against an AI, that will also guess what the image is</p>
             <h3>Be quick! The longer you take, the lower your score will be. Be careful though! Wrong answers give you no points</h3>
+            <br>
+            <p style="font-size: 12px">To change user, press reload button or refesh the page<br>For more settings, press the cog wheel<br>Reselect images using the sign out button</p>
           </div>
         </div>
       </transition>

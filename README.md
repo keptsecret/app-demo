@@ -10,11 +10,14 @@ The AI's answer can be shown by changing the label's text field
 The **Reveal** button can only be used once, and then it disappears  
 User has to enter text into the field  
 There is no current mechanic of comparing the answers *TODO*  
+Full image is shown after answer is submitted. 
+ 
+Percentage of image shown can be changed in the settings screen. 
   
-The player can **RESET** once they've entered and submitted an answer  
-- resetting doesn't refresh the page
+The player can go to the **NEXT** image once they've entered and submitted an answer  
+- doesn't refresh the page
 - it only resets the values in *data* and the canvas to their defaults
-- the overall progress (score and names) should be saved until the page is refreshed
+- the overall progress (score and names) should be saved until the page is refreshed or reset button is pressed
 ---
 The score is calculated based on the formula: 10*(60-time(s))
 This means if the guess takes 30 seconds or longer, the score received is 0  
@@ -29,11 +32,9 @@ This means if the guess takes 30 seconds or longer, the score received is 0
   
 *TODO:* 
 - ~~*could use custom dialog boxes*~~
-- ~~*work on transitions*~~
 - *improve design (color scheme?)*
 - *scoring mechanic, maybe text file to array for answers?*
-- ~~*show full image after submitting answer*~~
-- *user settings menu (maybe) e.g. % of image displayed/refresh user*
+- *prevent randomizer from picking same number twice (pick number from array and delete)*
 
 Additional packages added include:
 - ~~Slim Dialog for VueJS~~

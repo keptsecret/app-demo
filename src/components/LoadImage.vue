@@ -15,7 +15,11 @@ import image from "@/assets/1.jpg"
 import { setTimeout } from 'timers';
 
 export default {
-	name: "LoadImage",	
+	name: "LoadImage",
+
+	props: [
+		'selectionPercent'
+	],
 
 	data: function() {
 		return {
@@ -25,7 +29,7 @@ export default {
 			confirm: true,
 			showButton: true,
 			seconds: 0,
-			file: null
+			file: null,
 		};
 	},
 
@@ -42,10 +46,9 @@ export default {
 
 			var choice = "image" + randIndex;
 			this.file = localStorage.getItem(choice);
-			console.log(this.file);
+			var imgPercent = this.selectionPercent;
             
 			img.src = this.file;
-			console.log(img.src);
 			
 			img.onload = function() {
 				// scale the image down if it is too large
@@ -56,7 +59,6 @@ export default {
 				canvas.width = img.width * scaleRatio;
 				canvas.height = img.height * scaleRatio;
 
-				var imgPercent = 0.4; // size of image to show
 				var drawWidth = img.width * imgPercent;
 				var drawHeight = img.height * imgPercent;
 				var imgClipStartX = Math.floor(Math.random() * img.width * (1-imgPercent));

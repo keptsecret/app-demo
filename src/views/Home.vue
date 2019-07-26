@@ -1,8 +1,13 @@
 <template>
   <div class="home">
-     <div align="left">
-      <button class="reload" style="" @click="resetup()">&#8635;</button>
-     </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel='stylesheet' href='https://use.fontawesome.com/releases/v5.7.0/css/all.css' integrity='sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ' crossorigin='anonymous'>
+
+    <div align="right">
+      <button class="reload" @click='reload()'><i class='fa fa-repeat'></i></button>
+      <button class="reload" @click='openSettings()'><i class='fas fa-cog'></i></button>
+      <button class="reload" @click='resetup()'><i class='fas fa-sign-out-alt'></i></button>
+    </div>
     <main>
       <Panel
         class="demo-panel"
@@ -12,11 +17,26 @@
         ref="Panel"
       >
 
-        <LoadImage ref="img_canvas" @img-revealed="passSubmit"></LoadImage>
+        <LoadImage ref="img_canvas" @img-revealed="passSubmit" :selection-percent="selectionPercent"></LoadImage>
 
         <div>
           <p ref="timer" v-if="enableSubmit()"><time>Timer: 0s</time></p>
         </div>
+
+        <transition name="slide">
+          <div class="modal" v-if="showSettings"> 
+            <div class="modal-content">
+              <span class="close" @click="function() {showSettings = false;}">&times;</span>
+              <h1>Settings <span><i class='fas fa-cog'></i></span></h1>
+              <p style="display:inline-block; padding: 10px">Select the percent of image to be revealed:</p>
+              <select v-model="selectionPercent">
+                <option v-for="option in options" :value="option.value">
+                  {{ option.text }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </transition>
 
         <transition name="slide">
           <div style="display: flex; margin-top: 20px" v-if="enableSubmit()">
@@ -79,7 +99,15 @@ function initialState() {
     playerScore: 0,
     seconds: 0,
     time: null,
-    showResults: false
+    showResults: false,
+    showSettings: false,
+    selectionPercent: 0.4,
+    options: [
+      {text: "20", value: 0.2},
+      {text: "40", value: 0.4},
+      {text: "60", value: 0.6},
+      {text: "80", value: 0.8}
+    ]
   }
 }
 
@@ -126,10 +154,12 @@ export default {
     resetAll: function() {
       var tempName = this.playerName;
       var tempScore = this.playerScore;
+      var tempPercent = this.selectionPercent;
       this.$refs.img_canvas.resetCanvas();
       Object.assign(this.$data, initialState());
       this.playerName = tempName;
       this.playerScore = tempScore;
+      this.selectionPercent = tempPercent;
     },
 
     tick: function() {
@@ -158,6 +188,20 @@ export default {
     closeResults: function() {
       this.showResults = false;
       this.$refs.img_canvas.showFullImage();
+    },
+
+    reload: function() {
+      window.location.reload();
+    },
+
+    openSettings: function() {
+      this.showSettings = true;
+    },
+
+    applySettings: function() {
+      this.showSettings = false;
+      console.log(this.selectionPercent)
+      this.$refs.img_canvas.selectionPercent = this.selectionPercent;
     }
 
   },
@@ -217,9 +261,9 @@ h2 {
   color: #aaaaaa; 
   background-color: transparent; 
   border: none; 
-  font-size: 30px; 
+  font-size: 24px; 
   font-weight: bolder;
-  margin: auto;
+  margin-top: 10px;
 
   &:focus, &:hover {
     color: #000;
