@@ -18,43 +18,66 @@ export default {
 	name: "LoadImage",
 
 	props: [
-		'selectionPercent'
+		'selectionPercent',
+		'nextImage'
 	],
 
 	data: function() {
 		return {
 			ctx: null,
-			img: null,
-			imgData: null,
 			confirm: true,
 			showButton: true,
 			seconds: 0,
 			file: null,
+			choice: "",
+			choice_arr: []
 		};
 	},
 
 	methods: {
+
+		shuffle: function(a) {
+			var j, x, i;
+			for (i = a.length - 1; i > 0; i--) {
+				j = Math.floor(Math.random() * (i + 1));
+				x = a[i];
+				a[i] = a[j];
+				a[j] = x;
+			}
+			return a;
+		},
 
 		buttonClicked: function(confirm) {
 
 			document.getElementById('image_container').style.width = '100%';
 
 			var ctx = canvas.getContext('2d');
-			var length = localStorage.getItem("length");
-			var randIndex = Math.floor(Math.random() * length);
-			var img = new Image();
 
-			var choice = "image" + randIndex;
-			this.file = localStorage.getItem(choice);
+			if (this.choice == "") {
+				var length = localStorage.getItem("length");
+				for (var i = 1; i < length; i++) {
+					this.choice_arr.push(i);
+				}
+				this.choice_arr = this.shuffle(this.choice_arr);
+				console.log(this.choice_arr);
+				this.choice = "image" + this.choice_arr.pop();
+			}
+
+			if (this.nextImage) {
+				this.choice = "image" + this.choice_arr.pop();
+			}
+
+			this.file = localStorage.getItem(this.choice);
 			var imgPercent = this.selectionPercent;
-            
+			
+			var img = new Image();
 			img.src = this.file;
 			
 			img.onload = function() {
 				// scale the image down if it is too large
 				var scaleRatio = 1;
 				if (img.width > 800) scaleRatio = 800 / img.width;
-				if (img.height > 1000) scaleRatio = 1000 / img.height;
+				if (img.height > 1000 && (1000/img.height) > scaleRatio) scaleRatio = 1000 / img.height;
 				
 				canvas.width = img.width * scaleRatio;
 				canvas.height = img.height * scaleRatio;
@@ -64,8 +87,8 @@ export default {
 				var imgClipStartX = Math.floor(Math.random() * img.width * (1-imgPercent));
 				var imgClipStartY = Math.floor(Math.random() * img.height * (1-imgPercent));				
 
-				var imgPositionX = ((canvas.width-img.width) / 2 + (imgClipStartX)) * scaleRatio;
-				var imgPositionY = ((canvas.height-img.height) / 2 + (imgClipStartY)) * scaleRatio;
+				var imgPositionX = ((canvas.width-(img.width * scaleRatio)) / 2 + (imgClipStartX)) * scaleRatio;
+				var imgPositionY = ((canvas.height-(img.height * scaleRatio)) / 2 + (imgClipStartY)) * scaleRatio;
 				
 				ctx.clearRect(0, 0, img.width, img.height);
 				ctx.drawImage(img, imgClipStartX, imgClipStartY, drawWidth, drawHeight, imgPositionX, imgPositionY, drawWidth*scaleRatio, drawHeight*scaleRatio);

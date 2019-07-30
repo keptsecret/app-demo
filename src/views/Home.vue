@@ -17,10 +17,13 @@
         ref="Panel"
       >
 
-        <LoadImage ref="img_canvas" @img-revealed="passSubmit" :selection-percent="selectionPercent"></LoadImage>
+        <div>
+          <div><LoadImage ref="img_canvas" @img-revealed="passSubmit" :selection-percent="selectionPercent" :next-image="showNext"></LoadImage></div>
+          <div id="alertTime" ref="alertTime" style="display: none; position: absolute; left: calc(50% - 50px); bottom: calc(50% - 100px); background: transparent; width: 100px; height: 200px; font-size: 100px; color: red; font-weight: bolder"><h1></h1></div>
+        </div>
 
         <div>
-          <p ref="timer" v-if="enableSubmit()"><time>Timer: 0s</time></p>
+          <p ref="timer" v-if="enableSubmit()"><time>Timer: 15s</time></p>
         </div>
 
         <transition name="slide">
@@ -43,15 +46,21 @@
             <div style="flex: 1; margin-right: 20px; margin-left: 10px">
               <template>
                 <Form
+                  ref="form"
                   v-if="enableSubmit()"
                   @button-clicked="submit"
+                  :player-name="playerName"
                 />
               </template>
             </div>
 
             <div v-if="enableSubmit()" style="flex: 1; margin-left: 20px; margin-right: 10px;">
-              <p><b>AI Answer</b></p>
+              <p style="font-size:60px; margin:0px; text-align: center"><b>COMPUTER</b></p>
               <label>{{AIanswer}}</label>
+              <br>
+              <br>
+              <br>
+              <Reset v-if="showNext" @call-reset="resetAll" style="float: right; margin: 10px;"></Reset>
             </div>
           </div>
         </transition>
@@ -60,22 +69,15 @@
           <div class="modal" v-if="showResults">
             <div class="modal-content">
               <h1>Results</h1>
+              <h2 v-if="winStatus">You got it right!</h2>
+              <h2 v-if="!winStatus">Your answer is wrong...</h2>
               <p>You answered <span style="color: red">{{answer}}</span></p>
               <p>Computer answered <span style="color: blue">{{AIanswer}}</span></p>
-              <button ref="close" @click="closeResults()">Show full picture</button>
+              <button ref="close" @click="closeResults()" v-if="showNext">Show full picture</button>
+              <button ref="try_again" @click="tryAgain()" v-if="!showNext">Try again</button>
             </div>
           </div>
         </transition>
-
-        <div>
-          <div>
-            <label id="output" v-if="enableSubmit()" style="float:left; margin: 10px"></label>
-          </div>
-        
-          <div>
-            <Reset v-if="submittedAnswers()" @call-reset="resetAll" style="float:right; margin: 10px"></Reset>
-          </div>
-        </div>
         
       </Panel>
     </main>
@@ -95,13 +97,16 @@ function initialState() {
     confirm: false,
     message: "",
     AIanswer: "AI's answer",
+    realAnswer: "Answer",
+    winStatus: false,
     playerName: "",
     playerScore: 0,
-    seconds: 0,
+    seconds: 15,
     time: null,
     showResults: false,
     showSettings: false,
-    selectionPercent: 0.4,
+    showNext: false,
+    selectionPercent: 0.2,
     options: [
       {text: "20", value: 0.2},
       {text: "40", value: 0.4},
@@ -127,23 +132,28 @@ export default {
 
   methods: {
     submit: function (answer) {
-      document.getElementById("output").innerHTML = "Your answer: " + answer;
       this.answer = answer;
-      
-      // code for modal !!!!!
-      this.showResults = true;
-      console.log(this.answer.length);
       window.clearInterval(this.time); // stops the timer
-      this.calculateScore(); // calculate the score
-    },
+      this.showResults = true;
+      this.showNext = false;
 
-    submittedAnswers: function() {
-      return this.answer.length !== 0;
+      if (this.answer == this.realAnswer) {
+        this.winStatus = true;
+        this.showNext = true;
+        this.calculateScore(); // calculate the score
+      }
+      
+      if (this.selectionPercent >= 0.6) {
+        this.showNext = true;
+      } else {
+        this.selectionPercent += 0.2;
+      }
     },
 
     passSubmit: function(confirm) {
       console.log(confirm);
       this.confirm = confirm;
+      document.getElementById('alertTime').style.display = 'block';
       this.timer(); // starts the timer
     },
 
@@ -154,17 +164,20 @@ export default {
     resetAll: function() {
       var tempName = this.playerName;
       var tempScore = this.playerScore;
-      var tempPercent = this.selectionPercent;
+      var tempNext = this.showNext;
       this.$refs.img_canvas.resetCanvas();
+      document.getElementById('alertTime').innerHTML = "";
       Object.assign(this.$data, initialState());
       this.playerName = tempName;
       this.playerScore = tempScore;
-      this.selectionPercent = tempPercent;
+      this.showNext = tempNext;
     },
 
     tick: function() {
-      this.seconds++;
-			this.$refs.timer.textContent = "Time: " + this.seconds + "s";
+      this.seconds--;
+      this.$refs.timer.textContent = "Time: " + this.seconds + "s";
+      if (this.seconds <= 5) {this.$refs.alertTime.innerHTML = this.seconds;}
+      if (this.seconds === 0) {this.$refs.form.handleClick(this.$refs.form.answer);}
     },
 
     timer: function() {
@@ -188,6 +201,7 @@ export default {
     closeResults: function() {
       this.showResults = false;
       this.$refs.img_canvas.showFullImage();
+      document.getElementById('alertTime').style.display = 'none';
     },
 
     reload: function() {
@@ -202,6 +216,15 @@ export default {
       this.showSettings = false;
       console.log(this.selectionPercent)
       this.$refs.img_canvas.selectionPercent = this.selectionPercent;
+    },
+
+    tryAgain: function() {
+      this.showResults = false;
+      this.$refs.img_canvas.buttonClicked();
+      this.$refs.alertTime.innerHTML = "";
+      this.confirm = true;
+      this.seconds = 15;
+      this.enableSubmit();
     }
 
   },

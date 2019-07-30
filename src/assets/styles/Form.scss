@@ -31,7 +31,7 @@ form {
   flex-direction: column;
   flex-grow: 1;
   align-items: baseline;
-
+  text-align: center;
   /* Medium devices (landscape tablets, 812px and up) */
   @media only screen and (min-width: 812px) {
     height: 100%;

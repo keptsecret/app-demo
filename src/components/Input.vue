@@ -1,6 +1,5 @@
 <template>
   <div class="input-wrapper">
-    <label><b>{{label}}</b></label>
     <input
       class="input"
       v-if="type==='input'"
