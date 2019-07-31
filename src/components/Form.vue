@@ -1,6 +1,5 @@
 <template>
   <form @submit.prevent="handleClick(answer)">
-    <p style="text-align:center; font-size:60px; margin:0px"><b>{{playerName}}</b></p>
     <Input
       placeholder="Type your answer here"
       type="input"
@@ -28,7 +27,8 @@ export default {
   },
 
   props: [
-    'playerName'
+    'playerName',
+    'playerScore'
   ],
 
   data() {

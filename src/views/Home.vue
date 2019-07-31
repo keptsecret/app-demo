@@ -44,12 +44,14 @@
         <transition name="slide">
           <div style="display: flex; margin-top: 20px" v-if="enableSubmit()">
             <div style="flex: 1; margin-right: 20px; margin-left: 10px">
+              <p style="text-align:center; font-size:60px; margin:0px"><b>{{playerName}} | {{playerScore}}</b></p>
               <template>
                 <Form
                   ref="form"
                   v-if="enableSubmit()"
                   @button-clicked="submit"
                   :player-name="playerName"
+                  :player-score="playerScore"
                 />
               </template>
             </div>
@@ -154,10 +156,12 @@ export default {
       console.log(confirm);
       this.confirm = confirm;
       document.getElementById('alertTime').style.display = 'block';
+      this.showNext = false;
       this.timer(); // starts the timer
     },
 
     enableSubmit: function() {
+      //this.showNext = false;
       return this.confirm;
     },
 
@@ -176,8 +180,16 @@ export default {
     tick: function() {
       this.seconds--;
       this.$refs.timer.textContent = "Time: " + this.seconds + "s";
-      if (this.seconds <= 5) {this.$refs.alertTime.innerHTML = this.seconds;}
-      if (this.seconds === 0) {this.$refs.form.handleClick(this.$refs.form.answer);}
+      if (this.seconds <= 5) {
+        this.$refs.alertTime.innerHTML = this.seconds;
+        var audio = new Audio("http://www.soundjay.com/button/beep-07.wav");
+        audio.play();
+        }
+      if (this.seconds === 0) {
+        this.$refs.form.handleClick(this.$refs.form.answer);
+        var audio = new Audio("http://www.soundjay.com/button/beep-01a.wav");
+        audio.play();
+        }
     },
 
     timer: function() {

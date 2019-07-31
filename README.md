@@ -1,4 +1,4 @@
-# demov2
+# demov2 COMPLETE
 
 ## Project details  
 Image files are being used from file selection (see section below)  
@@ -31,10 +31,9 @@ This means if the guess takes 30 seconds or longer, the score received is 0
 - *will have to match this to answer from text file somehow*
   
 *TODO:* 
-- *scoring mechanic, maybe text file to array for answers?*
-- *prevent randomizer from picking same number twice (pick number from array and delete)*
+- ~~*prevent randomizer from picking same number twice (pick number from array and delete)*~~
 - ~~*UI overhaul: big player names above answer boxes, big timer between names and counts down from 15s*~~
-- *add number of rounds; begin by showing 20% of image; each round if answer is wrong, then show bigger % of image (20 -> 40 -> 60)*
+- ~~*add number of rounds; begin by showing 20% of image; each round if answer is wrong, then show bigger % of image (20 -> 40 -> 60)*~~
 
 
 Additional packages added include:
