@@ -5,24 +5,24 @@ Image files are being used from file selection (see section below)
 
 ---
 The AI's answer can be shown by changing the label's text field  
-- change by accessing the data field **AIanswer** in file *App.vue*
+- change by accessing the data field **AIanswer** in file *Home.vue*
 ---
 The **Reveal** button can only be used once, and then it disappears  
 User has to enter text into the field  
-There is no current mechanic of comparing the answers *TODO*  
-Full image is shown after answer is submitted. 
- 
-Percentage of image shown can be changed in the settings screen. 
+~~There is no current mechanic of comparing the answers~~  
+   
+Percentage of image increases if the player gets the answer wrong from 20% to 40%, then 40% to 60%.  
+If player gets the answer correct, the results will be shown and the full image will be revealed.  
+If the player gets the answer wrong at 60%, then the round is over and full image will be shown.  
   
-The player can go to the **NEXT** image once they've entered and submitted an answer  
+The player can go to the **NEXT** image if their answer is correct or if they've answered wrong 3 times  
 - doesn't refresh the page
 - it only resets the values in *data* and the canvas to their defaults
-- the overall progress (score and names) should be saved until the page is refreshed or reset button is pressed
+- the overall progress (score and names) should be saved until the page is refreshed or reset button is pressed  
 ---
-The score is calculated based on the formula: 10*(60-time(s))
+The score is calculated based on the formula: 10*(60-time(s))  
 This means if the guess takes 30 seconds or longer, the score received is 0  
-**Need a scoring mechanic, compare answers from AI to human to real answer**  
-
+  
 ---
 ### How images are saved to program
 1. images are selected by the file browser

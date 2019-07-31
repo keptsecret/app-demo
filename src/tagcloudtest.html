@@ -1,0 +1,17 @@
+<body>
+  <button onclick="press()">press me</button>
+</body>
+
+<script>
+var words = ["help", "poo", "thing", "what", "piss"];
+var list = "<div style=\"margin:50px\"><span><a class=\"bucket\">ccc</a></span><span><a class=\"bucket\">sss</a></span><span><a class=\"bucket\">eee</a></span><span><a class=\"bucket\">www</a></span><span><a class=\"bucket\">hhh</a></span><span><a class=\"bucket\">ccc</a></span><span><a class=\"bucket\">sss</a></span><span><a class=\"bucket\">eee</a></span><span><a class=\"bucket\">www</a></span><span><a class=\"bucket\">hhh</a></span></div>"
+
+function press() {
+    var newdiv = document.createElement('div');
+    document.getElementsByTagName('body');
+    newdiv.id = "newdiv";
+    document.getElementsByTagName('body')[0].appendChild(newdiv);
+  
+    document.getElementById('newdiv').innerHTML = list;
+}
+</script>
