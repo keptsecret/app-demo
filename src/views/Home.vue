@@ -45,15 +45,7 @@
           <div style="display: flex; margin-top: 20px" v-if="enableSubmit()">
             <div style="flex: 1; margin-right: 20px; margin-left: 10px">
               <p style="text-align:center; font-size:60px; margin:0px"><b>{{playerName}} | {{playerScore}}</b></p>
-              <template>
-                <Form
-                  ref="form"
-                  v-if="enableSubmit()"
-                  @button-clicked="submit"
-                  :player-name="playerName"
-                  :player-score="playerScore"
-                />
-              </template>
+              <AnswerCloud ref="answers" @answer-clicked="submit" v-if="enableSubmit()"></AnswerCloud>
             </div>
 
             <div v-if="enableSubmit()" style="flex: 1; margin-left: 20px; margin-right: 10px;">
@@ -92,6 +84,7 @@ import Panel from '@/components/Panel.vue'
 import LoadImage from '@/components/LoadImage.vue'
 import Form from '@/components/Form.vue'
 import Reset from '@/components/Reset.vue'
+import AnswerCloud from '@/components/AnswerCloud.vue'
 
 function initialState() {
   return {
@@ -99,7 +92,7 @@ function initialState() {
     confirm: false,
     message: "",
     AIanswer: "AI's answer",
-    realAnswer: "Answer",
+    realAnswer: "Answer ",
     winStatus: false,
     playerName: "",
     playerScore: 0,
@@ -125,7 +118,8 @@ export default {
     Panel,
     LoadImage,
     Form,
-    Reset
+    Reset,
+    AnswerCloud
   },
 
   data() {
@@ -135,6 +129,7 @@ export default {
   methods: {
     submit: function (answer) {
       this.answer = answer;
+      
       window.clearInterval(this.time); // stops the timer
       this.showResults = true;
       this.showNext = false;
@@ -150,6 +145,7 @@ export default {
       } else {
         this.selectionPercent += 0.2;
       }
+      
     },
 
     passSubmit: function(confirm) {
@@ -186,9 +182,10 @@ export default {
         audio.play();
         }
       if (this.seconds === 0) {
-        this.$refs.form.handleClick(this.$refs.form.answer);
+        //this.$refs.form.handleClick(this.$refs.form.answer);
         var audio = new Audio("http://www.soundjay.com/button/beep-01a.wav");
         audio.play();
+        this.submit("");
         }
     },
 

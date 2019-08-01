@@ -1,4 +1,4 @@
-# demov2 COMPLETE
+# demov3
 
 ## Project details  
 Image files are being used from file selection (see section below)  

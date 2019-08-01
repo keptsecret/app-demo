@@ -1,0 +1,10 @@
+.cloud {
+    font-size: 28px;
+    transition: .1s ease;
+    cursor: pointer;
+
+    &:hover {
+        font-size: 32px;
+        font-weight: bolder;
+    }
+}
