@@ -1,5 +1,5 @@
 <template>
-    <div id="container" style="margin:auto; width:50%">
+    <div id="container" style="margin:auto; width:80%">
         <p>Pick your answer:</p>
     </div>
 </template>
@@ -26,6 +26,7 @@ export default {
             document.getElementById('cloud_div').disabled = false;
 
             this.choicesArray = ["word", "speak", "talk", "blah", "Answer"];
+            this.choicesArray = this.shuffle(this.choicesArray);
             this.generated = "";
             
             this.generateCloud(this.choicesArray);
@@ -57,6 +58,17 @@ export default {
             }
             return color;
         },
+
+        shuffle: function(a) {
+			var j, x, i;
+			for (i = a.length - 1; i > 0; i--) {
+				j = Math.floor(Math.random() * (i + 1));
+				x = a[i];
+				a[i] = a[j];
+				a[j] = x;
+			}
+			return a;
+		},
     },
 
     mounted: function() {

@@ -23,7 +23,7 @@
         </div>
 
         <div>
-          <p ref="timer" v-if="enableSubmit()"><time>Timer: 15s</time></p>
+          <p ref="timer" v-if="enableSubmit()"><time>Timer: 10s</time></p>
         </div>
 
         <transition name="slide">
@@ -45,12 +45,11 @@
           <div style="display: flex; margin-top: 20px" v-if="enableSubmit()">
             <div style="flex: 1; margin-right: 20px; margin-left: 10px">
               <p style="text-align:center; font-size:60px; margin:0px"><b>{{playerName}} | {{playerScore}}</b></p>
-              <AnswerCloud ref="answers" @answer-clicked="submit" v-if="enableSubmit()"></AnswerCloud>
+              <p style="font-size:60px; margin:0px; text-align: center"><b>COMPUTER | {{AIscore}}</b></p>
             </div>
 
             <div v-if="enableSubmit()" style="flex: 1; margin-left: 20px; margin-right: 10px;">
-              <p style="font-size:60px; margin:0px; text-align: center"><b>COMPUTER</b></p>
-              <label>{{AIanswer}}</label>
+              <AnswerCloud ref="answers" @answer-clicked="submit" v-if="enableSubmit()"></AnswerCloud>
               <br>
               <br>
               <br>
@@ -96,7 +95,8 @@ function initialState() {
     winStatus: false,
     playerName: "",
     playerScore: 0,
-    seconds: 15,
+    AIscore: 0,
+    seconds: 10,
     time: null,
     showResults: false,
     showSettings: false,
@@ -232,7 +232,7 @@ export default {
       this.$refs.img_canvas.buttonClicked();
       this.$refs.alertTime.innerHTML = "";
       this.confirm = true;
-      this.seconds = 15;
+      this.seconds = 10;
       this.enableSubmit();
     }
 
