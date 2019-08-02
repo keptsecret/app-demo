@@ -1,6 +1,6 @@
 <template>
     <div id="container" style="margin:auto; width:80%">
-        <p>Pick your answer:</p>
+        <p>เลือกคำตอบ:</p>
     </div>
 </template>
 
@@ -25,7 +25,6 @@ export default {
             document.getElementById('container').appendChild(newdiv);
             document.getElementById('cloud_div').disabled = false;
 
-            this.choicesArray = ["word", "speak", "talk", "blah", "Answer"];
             this.choicesArray = this.shuffle(this.choicesArray);
             this.generated = "";
             
@@ -34,7 +33,6 @@ export default {
 
             for (var i = 0; i < this.choicesArray.length; i++) {
                 let index = i.toString();
-                console.log(index);
                 document.getElementById(index).onclick = () => {
                     console.log(document.getElementById(index).innerHTML);
                     this.$emit("answer-clicked", document.getElementById(index).innerHTML)

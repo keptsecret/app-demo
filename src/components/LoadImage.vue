@@ -4,7 +4,7 @@
 			<canvas id="canvas" ref="canvas" class="canvas"></canvas>
 		</div>
 		<div style="margin-right: 10px">
-			<button class="reveal" v-if="showButton" id="input" @click="buttonClicked(confirm)">Reveal</button>
+			<button class="reveal" v-if="showButton" id="input" @click="buttonClicked(confirm)">โชว์ภาพ</button>
 		</div>
 		
 	</div>
@@ -30,7 +30,12 @@ export default {
 			seconds: 0,
 			file: null,
 			choice: "",
-			choice_arr: []
+			choice_arr: [],
+			clipX: 0,
+			clipY: 0,
+			drawWidth: 0,
+			drawHeight: 0
+
 		};
 	},
 
@@ -73,7 +78,7 @@ export default {
 			var img = new Image();
 			img.src = this.file;
 			
-			img.onload = function() {
+			img.onload = () => {
 				// scale the image down if it is too large
 				var scaleRatio = 1;
 				if (img.width > 800) scaleRatio = 800 / img.width;
@@ -84,8 +89,10 @@ export default {
 
 				var drawWidth = img.width * imgPercent;
 				var drawHeight = img.height * imgPercent;
+				this.drawWidth = drawWidth; this.drawHeight = drawHeight;
 				var imgClipStartX = Math.floor(Math.random() * img.width * (1-imgPercent));
-				var imgClipStartY = Math.floor(Math.random() * img.height * (1-imgPercent));				
+				var imgClipStartY = Math.floor(Math.random() * img.height * (1-imgPercent));
+				this.clipX = imgClipStartX; this.clipY = imgClipStartY;
 
 				var imgPositionX = ((canvas.width-(img.width * scaleRatio)) / 2 + (imgClipStartX)) * scaleRatio;
 				var imgPositionY = ((canvas.height-(img.height * scaleRatio)) / 2 + (imgClipStartY)) * scaleRatio;
@@ -93,7 +100,6 @@ export default {
 				ctx.clearRect(0, 0, img.width, img.height);
 				ctx.drawImage(img, imgClipStartX, imgClipStartY, drawWidth, drawHeight, imgPositionX, imgPositionY, drawWidth*scaleRatio, drawHeight*scaleRatio);
 			}
-			//var confirm = true;
 
 			this.$emit("img-revealed", confirm);
 			this.showButton = false;
@@ -109,7 +115,6 @@ export default {
 		},
 
 		showFullImage: function() {
-			//document.getElementById('image_container').style.height = 0;
 
 			var ctx = canvas.getContext('2d');
 			var img = new Image();
@@ -126,8 +131,6 @@ export default {
 				ctx.clearRect(0, 0, img.width, img.height);
 				ctx.drawImage(img, 0, 0, img.width * scaleRatio, img.height * scaleRatio);
 			}
-
-			//document.getElementById('image_container').style.height = 'auto';
 			
 		}
 

@@ -5,27 +5,26 @@
 
     <div align="right">
       <button class="reload" @click='reload()'><i class='fa fa-repeat'></i></button>
-      <button class="reload" @click='openSettings()'><i class='fas fa-cog'></i></button>
       <button class="reload" @click='resetup()'><i class='fas fa-sign-out-alt'></i></button>
     </div>
     <main>
       <Panel
         class="demo-panel"
-        headline="App demo"
-        :player-name="playerName"
-        :player-score="playerScore"
+        :headline="headline"
         ref="Panel"
       >
 
+        <!-- Component showing the image and image pieces -->
         <div>
           <div><LoadImage ref="img_canvas" @img-revealed="passSubmit" :selection-percent="selectionPercent" :next-image="showNext"></LoadImage></div>
           <div id="alertTime" ref="alertTime" style="display: none; position: absolute; left: calc(50% - 50px); bottom: calc(50% - 100px); background: transparent; width: 100px; height: 200px; font-size: 100px; color: red; font-weight: bolder"><h1></h1></div>
         </div>
 
         <div>
-          <p ref="timer" v-if="enableSubmit()"><time>Timer: 10s</time></p>
+          <p ref="timer" v-if="enableSubmit()"><time>เวลา: 10</time></p>
         </div>
 
+        <!-- Settings are no longer used
         <transition name="slide">
           <div class="modal" v-if="showSettings"> 
             <div class="modal-content">
@@ -40,16 +39,18 @@
             </div>
           </div>
         </transition>
+        -->
 
+        <!-- Component showing player info and answers -->
         <transition name="slide">
           <div style="display: flex; margin-top: 20px" v-if="enableSubmit()">
             <div style="flex: 1; margin-right: 20px; margin-left: 10px">
-              <p style="text-align:center; font-size:60px; margin:0px"><b>{{playerName}} | {{playerScore}}</b></p>
-              <p style="font-size:60px; margin:0px; text-align: center"><b>COMPUTER | {{AIscore}}</b></p>
+              <p style="text-align:center; font-size:60px; margin:0px; color: #2f40ac"><b>{{playerName}}</b></p>
+              <p style="font-size:60px; margin:0px; text-align: center; color: #6328b8"><b>AI</b></p>
             </div>
 
             <div v-if="enableSubmit()" style="flex: 1; margin-left: 20px; margin-right: 10px;">
-              <AnswerCloud ref="answers" @answer-clicked="submit" v-if="enableSubmit()"></AnswerCloud>
+              <AnswerCloud ref="answers" @answer-clicked="submit" v-if="enableSubmit()" :choices-array="choices"></AnswerCloud>
               <br>
               <br>
               <br>
@@ -58,16 +59,19 @@
           </div>
         </transition>
 
+        <!-- Component showing results -->
         <transition name="results-popup">
           <div class="modal" v-if="showResults">
             <div class="modal-content">
-              <h1>Results</h1>
-              <h2 v-if="winStatus">You got it right!</h2>
-              <h2 v-if="!winStatus">Your answer is wrong...</h2>
-              <p>You answered <span style="color: red">{{answer}}</span></p>
-              <p>Computer answered <span style="color: blue">{{AIanswer}}</span></p>
-              <button ref="close" @click="closeResults()" v-if="showNext">Show full picture</button>
-              <button ref="try_again" @click="tryAgain()" v-if="!showNext">Try again</button>
+              <h1>ผลเกมส์</h1>
+              <h2 v-if="winStatus == 0">คุณคือผู้ชนะ!</h2>
+              <h2 v-if="winStatus == 1">พยายามใหม่...</h2>
+              <h2 v-if="winStatus == 2">คุณแพ้แล้ว :(</h2>
+              <p>คุณตอบว่า <span style="color: red">{{answer}}</span></p>
+              <p>AI ตอบว่า <span style="color: blue">{{AIanswer}}</span></p>
+              <p v-if="showNext">คำตอบที่ถูกคือ <span style="font-weight:bolder">{{realAnswer}}</span></p>
+              <button ref="close" @click="closeResults()" v-if="showNext">โชว์ภาพเต็ม</button>
+              <button ref="try_again" @click="tryAgain()" v-if="!showNext">ตอบใหม่</button>
             </div>
           </div>
         </transition>
@@ -81,18 +85,19 @@
 // @ is an alias to /src
 import Panel from '@/components/Panel.vue'
 import LoadImage from '@/components/LoadImage.vue'
-import Form from '@/components/Form.vue'
+//import Form from '@/components/Form.vue'
 import Reset from '@/components/Reset.vue'
 import AnswerCloud from '@/components/AnswerCloud.vue'
 
 function initialState() {
   return {
+    headline: "แฟนพันธุ์แท้ \"อาหารไทย\"",
     answer: "",
     confirm: false,
     message: "",
     AIanswer: "AI's answer",
     realAnswer: "Answer ",
-    winStatus: false,
+    winStatus: 1,
     playerName: "",
     playerScore: 0,
     AIscore: 0,
@@ -102,6 +107,7 @@ function initialState() {
     showSettings: false,
     showNext: false,
     selectionPercent: 0.2,
+    choices: ["word", "speak", "talk", "blah", "Answer", "water", "food", "air", "things"],
     options: [
       {text: "20", value: 0.2},
       {text: "40", value: 0.4},
@@ -117,7 +123,7 @@ export default {
   components: {
     Panel,
     LoadImage,
-    Form,
+    //ßForm,
     Reset,
     AnswerCloud
   },
@@ -129,23 +135,26 @@ export default {
   methods: {
     submit: function (answer) {
       this.answer = answer;
-      
+
       window.clearInterval(this.time); // stops the timer
       this.showResults = true;
       this.showNext = false;
 
       if (this.answer == this.realAnswer) {
-        this.winStatus = true;
+        this.winStatus = 0;
         this.showNext = true;
         this.calculateScore(); // calculate the score
+        return 0;
       }
       
       if (this.selectionPercent >= 0.6) {
+        this.winStatus = 2;
         this.showNext = true;
       } else {
+        this.winStatus = 1;
         this.selectionPercent += 0.2;
       }
-      
+
     },
 
     passSubmit: function(confirm) {
@@ -175,7 +184,7 @@ export default {
 
     tick: function() {
       this.seconds--;
-      this.$refs.timer.textContent = "Time: " + this.seconds + "s";
+      this.$refs.timer.textContent = "เวลา: " + this.seconds;
       if (this.seconds <= 5) {
         this.$refs.alertTime.innerHTML = this.seconds;
         var audio = new Audio("http://www.soundjay.com/button/beep-07.wav");
@@ -239,8 +248,8 @@ export default {
   },
 
   mounted() {
-    const options = {title: 'Player Name', okLabel: 'Continue', size: 'sm'};
-      this.$dialogs.prompt('Please enter your name:', options)
+    const options = {title: 'ลงชื่อผู้เล่น', okLabel: 'ถัดไป', size: 'sm'};
+      this.$dialogs.prompt('ลงชื่อ:', options)
       .then(res => {
         this.playerName = res.value; // {value: 'user input', ok: true|false|undefined}
       });

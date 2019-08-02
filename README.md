@@ -2,7 +2,10 @@
 
 ## Project details  
 Image files are being used from file selection (see section below)  
-
+App name can be changed in the the *headline* of the *Panel* component in *Home.vue* 
+List of answers is put into *choicesArray* in *AnswerCloud.vue* but can be sent to *choices* in *Home.vue*  
+- there is placeholder answers in there for testing  
+  
 ---
 The correct answer can be received from the server-side (no request methods yet) into data field **realAnswer** in file *Home.vue*  
 The player's answer is received from the player's choice in *AnswerCloud.vue* to **answer** in *Home.vue*  
@@ -29,7 +32,12 @@ This means if the guess takes 30 seconds or longer, the score received is 0
 1. images are selected by the file browser
 2. image data is saved as blobs to localStorage (client-side, and browser limits torage size to 5MB)
 3. randomized selection pulled from localStorage and displayed
+- Oversized images (bigger than 800x1000px) are shrunk
 - *will have to match this to answer from text file somehow*
+  
+The x,y position of the clipped image is *clipX* and *clipY* in *LoadImage.vue*  
+The width and height of the clipped image is *drawWidth* and *drawHeight* in *LoadImage.vue*  
+- can be sent to AI for info
   
 *TODO:* 
 - ~~*prevent randomizer from picking same number twice (pick number from array and delete)*~~
